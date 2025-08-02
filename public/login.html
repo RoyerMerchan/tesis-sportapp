@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <script src="Sender.js"></script>
+</head>
+
+<body>
+    <script>
+        function doLogin(j){
+            sender.callback = function(resp){console.log(resp)};
+            sender.send(j)
+            // fetch("/sesion",{
+            //     method: 'post',
+            //     body: JSON.stringify(j),
+            //     headers:{'Content-type':'application/json'},
+            //     mode:"cors",
+            //     cache:'default'
+            // })
+            // .then(response =>{return response.json()})
+            // .then(r => {console.log(r)})
+            
+        }
+
+        function capture(){
+            console.log('123')
+            let user = document.getElementById('username')
+            let password = document.getElementById('password')
+
+            doLogin({'user': user.value, 'password': password.value})
+
+        }
+    </script>
+    <h1>Login Page</h1>
+    <label for="username">Username:</label>
+    <input type="text" id="username" name="username" required>
+    <br>
+    <label for="password">Password:</label>
+    <input type="password" id="password" name="password" required>
+    <br>
+    <button onclick="capture()">Login</button>
+</body>
+
+</html>
