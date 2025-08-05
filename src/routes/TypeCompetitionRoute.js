@@ -4,19 +4,19 @@ import typeCompetitionController from '../Controller/TypeCompetitionController.j
 const router = express.Router();
 
 router.post('/', (req, res) => {
-  const { accion } = req.body;
+  const { action } = req.body;
 
-  switch (accion) {
-    case 'insertar':
+  switch (action) {
+    case '1':
       return typeCompetitionController.insertar(req, res);
 
-    case 'actualizar':
+    case '2':
       return typeCompetitionController.actualizar(req, res);
 
-    case 'borrar':
+    case '3':
       return typeCompetitionController.borrar(req, res);
 
-    case 'seleccionar':
+    case '4':
       return typeCompetitionController.seleccionar(req, res);
 
     default:

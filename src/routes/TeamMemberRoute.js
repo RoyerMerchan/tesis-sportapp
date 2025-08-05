@@ -4,19 +4,19 @@ import teamMemberController from '../Controller/TeamMemberController.js';
 const router = express.Router();
 
 router.post('/', (req, res) => {
-  const { accion } = req.body;
+  const { action } = req.body;
 
-  switch (accion) {
-    case 'insertar':
+  switch (action) {
+    case '1':
       return teamMemberController.insertar(req, res);
 
-    case 'actualizar':
+    case '2':
       return teamMemberController.actualizar(req, res);
 
-    case 'borrar':
+    case '3':
       return teamMemberController.borrar(req, res);
 
-    case 'seleccionar':
+    case '4':
       return teamMemberController.seleccionar(req, res);
 
     default:

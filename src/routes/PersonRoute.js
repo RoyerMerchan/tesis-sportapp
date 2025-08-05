@@ -4,9 +4,9 @@ import PersonController from '../Controller/PersonController.js';
 const router = express.Router();
 
 router.post('/', (req, res) => {
-  const { accion } = req.body;
+  const { action } = req.body;
 
-  switch (accion) {
+  switch (action) {
     case 'insertar':
       return PersonController.insertar(req, res);
 

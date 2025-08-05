@@ -4,9 +4,9 @@ import sportStatisticController from '../Controller/SportStatisticController.js'
 const router = express.Router();
 
 router.post('/', (req, res) => {
-  const { accion } = req.body;
+  const { action } = req.body;
 
-  switch (accion) {
+  switch (action) {
     case 'insertar':
       return sportStatisticController.insertar(req, res);
 

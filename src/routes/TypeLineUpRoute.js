@@ -4,16 +4,16 @@ import typeLineUpController from '../Controller/TypeLineUpController.js';
 const router = express.Router();
 
 router.post('/', (req, res) => {
-  const { accion } = req.body;
+  const { action } = req.body;
 
-  switch (accion) {
-    case 'insertar':
+  switch (action) {
+    case '1':
       return typeLineUpController.insertar(req, res);
-    case 'actualizar':
+    case '2':
       return typeLineUpController.actualizar(req, res);
-    case 'borrar':
+    case '3':
       return typeLineUpController.borrar(req, res);
-    case 'seleccionar':
+    case '4':
       return typeLineUpController.seleccionar(req, res);
     default:
       return res.status(400).json({ error: "Acción no válida para type_line-up" });

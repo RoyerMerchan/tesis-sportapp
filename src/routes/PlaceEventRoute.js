@@ -3,9 +3,9 @@ const router = Router();
 import placeEventController from '../Controller/PlaceEventController';
 
 router.post('/', (req, res) => {
-  const { accion } = req.body;
+  const { action } = req.body;
 
-  switch (accion) {
+  switch (action) {
     case '1':
       return placeEventController.insertar(req, res);
 

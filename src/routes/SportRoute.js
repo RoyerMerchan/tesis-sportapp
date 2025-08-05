@@ -3,9 +3,9 @@ const router = Router();
 import sportController from '../Controller/SportController';
 
 router.post('/', (req, res) => {
-  const { accion } = req.body;
+  const { action } = req.body;
 
-  switch (accion) {
+  switch (action) {
     case '1':
       return sportController.insertar(req, res);
 

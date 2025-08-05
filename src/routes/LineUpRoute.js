@@ -4,9 +4,9 @@ import lineUpController from '../Controller/LineUpController.js';
 const router = express.Router();
 
 router.post('/', (req, res) => {
-  const { accion } = req.body;
+  const { action } = req.body;
 
-  switch (accion) {
+  switch (action) {
     case 'insertar':
       return lineUpController.insertar(req, res);
 

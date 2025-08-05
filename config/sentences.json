@@ -2,6 +2,7 @@
     "security":{
         "getUser": "select u.user_id, u.na_user, p.profile_id, p.de_profile from profile_user pu inner join profile p on pu.profile_id = p.profile_id inner join public.user u on pu.user_id = u.user_id where u.na_user = $1 and u.pa_user= $2",
     
+        "insertUser":"INSERT INTO public.user (na_user, pa_user, em_user, person_id) VALUES ($1, $2, $3, $4);",
         "getUserByUsername": "select * from public.user where na_user = $1",
         "customQuery": "UPDATE public.user SET na_user = $1 , pa_user = $2 WHERE user_id = $3;",
         "deleteUser": "DELETE FROM public.user WHERE user_id = $1",
