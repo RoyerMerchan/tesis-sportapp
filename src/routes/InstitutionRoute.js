@@ -1,27 +1,11 @@
 import express from 'express';
-import institutionController from '../Controller/InstitutionController';
+import institutionController from '../Controller/InstitutionController.js';
 
 const router = express.Router();
 
-router.post('/', (req, res) => {
-  const { action } = req.body;
-
-  switch (action) {
-    case '1':
-      return institutionController.insertar(req, res);
-
-    case '2':
-      return institutionController.actualizar(req, res);
-
-    case '3':
-      return institutionController.borrar(req, res);
-
-    case '4':
-      return institutionController.seleccionar(req, res);
-
-    default:
-      return res.status(400).json({ error: "Acción no válida para institution" });
-  }
-});
+router.get('/', institutionController.seleccionar)
+router.post('/', institutionController.insertar)
+router.put('/', institutionController.actualizar)
+router.delete('/', institutionController.borrar)
 
 export default router;

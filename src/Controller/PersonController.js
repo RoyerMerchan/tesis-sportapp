@@ -1,7 +1,9 @@
 class PersonController {
   async insertar(req, res) {
     const { id_type_person, na_person, ln_person } = req.body;
+    console.log("Insertando persona:", req.body);
     if (!id_type_person || !na_person || !ln_person)
+      
       return sendToCli({ status: 400, msg: "Todos los campos son requeridos" });
 
     try {
@@ -18,7 +20,11 @@ class PersonController {
       return sendToCli({ status: 400, msg: "ID y datos completos requeridos para actualizar" });
 
     try {
-      await db.exe("security", "updatePerson", [id_type_person, na_person, ln_person, id_person]);
+      
+      const result = await db.exe("security", "updatePerson", [na_person, ln_person, id_type_person, id_person]);
+       if (result.rowCount === 0) {
+        return sendToCli({ status: 404, msg: "person no encontrada" });
+      }
       return sendToCli({ status: 200, msg: "Persona actualizada correctamente" });
     } catch (err) {
       return sendToCli({ status: 500, msg: "Error al actualizar persona", detalle: err.message });
@@ -26,12 +32,15 @@ class PersonController {
   }
 
   async borrar(req, res) {
-    const { id_person } = req.body;
+    const { id_person } = req.query;
     if (!id_person)
       return sendToCli({ status: 400, msg: "ID requerido para eliminar" });
 
     try {
-      await db.exe("security", "deletePerson", [id_person]);
+      const result = await db.exe("security", "deletePerson", [id_person]);
+       if (result.rowCount === 0) {
+        return sendToCli({ status: 404, msg: "persona no encontrada" });
+      }
       return sendToCli({ status: 200, msg: "Persona eliminada correctamente" });
     } catch (err) {
       return sendToCli({ status: 500, msg: "Error al eliminar persona", detalle: err.message });

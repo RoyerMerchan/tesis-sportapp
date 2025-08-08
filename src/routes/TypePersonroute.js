@@ -1,26 +1,10 @@
 import { Router } from 'express';
 const router = Router();
-import TipoPersonaController from '../Controller/TypePersonController';
+import TipoPersonaController from '../Controller/TypePersonController.js';
 
-router.post('/', (req, res) => {
-  const { action } = req.body;
-
-  switch (action) {
-    case '1':
-      return TipoPersonaController.insertar(req, res);
-
-    case '2':
-      return TipoPersonaController.actualizar(req, res);
-
-    case '3':
-      return TipoPersonaController.borrar(req, res);
-
-    case '4':
-      return TipoPersonaController.seleccionar(req, res);
-
-    default:
-      return res.status(400).json({ error: "Acción no válida para tipo_persona" });
-  }
-});
+router.get('/', TipoPersonaController.seleccionar)
+router.post('/', TipoPersonaController.insertar)
+router.put('/', TipoPersonaController.actualizar)
+router.delete('/', TipoPersonaController.borrar)
 
 export default router;

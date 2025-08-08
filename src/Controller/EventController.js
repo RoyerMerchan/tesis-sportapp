@@ -17,7 +17,10 @@ class EventController {
       return sendToCli({ status: 400, msg: "ID y nuevo nombre requeridos" });
 
     try {
-      await db.exe("security", "updateEvent", [name_event, id_event]);
+    const result=   await db.exe("security", "updateEvent", [name_event, id_event]);
+       if (result.rowCount === 0) {
+        return sendToCli({ status: 404, msg: "evento no encontrado" });
+      }
       return sendToCli({ status: 200, msg: "Evento actualizado" });
     } catch (err) {
       return sendToCli({ status: 500, msg: "Error al actualizar evento", detalle: err.message });
@@ -25,12 +28,15 @@ class EventController {
   }
 
   async borrar(req, res) {
-    const { id_event } = req.body;
+    const { id_event } = req.query;
     if (!id_event)
       return sendToCli({ status: 400, msg: "ID del evento requerido" });
 
     try {
-      await db.exe("security", "deleteEvent", [id_event]);
+      const result = await db.exe("security", "deleteEvent", [id_event]);
+      if (result.rowCount === 0) {
+        return sendToCli({ status: 404, msg: "Evento no encontrado" });
+      }
       return sendToCli({ status: 200, msg: "Evento eliminado" });
     } catch (err) {
       return sendToCli({ status: 500, msg: "Error al borrar evento", detalle: err.message });

@@ -18,7 +18,10 @@ class TeamController {
       return sendToCli({ status: 400, msg: "ID y todos los campos son requeridos" });
 
     try {
-      await db.exe("sport", "updateTeam", [na_team, sport_id, institution_id, team_id]);
+     const result =  await db.exe("sport", "updateTeam", [na_team, sport_id, institution_id, team_id]);
+       if (result.rowCount === 0) {
+        return sendToCli({ status: 404, msg: "equipo no encontrado" });
+      }
       return sendToCli({ status: 200, msg: "Equipo actualizado correctamente" });
     } catch (err) {
       return sendToCli({ status: 500, msg: "Error al actualizar equipo", detalle: err.message });
@@ -26,12 +29,15 @@ class TeamController {
   }
 
   async borrar(req, res) {
-    const { team_id } = req.body;
+    const { team_id } = req.query;
     if (!team_id)
       return sendToCli({ status: 400, msg: "ID requerido para eliminar" });
 
     try {
-      await db.exe("sport", "deleteTeam", [team_id]);
+     const result = await db.exe("sport", "deleteTeam", [team_id]);
+       if (result.rowCount === 0) {
+        return sendToCli({ status: 404, msg: "equipo no encontrado" });
+      }
       return sendToCli({ status: 200, msg: "Equipo eliminado correctamente" });
     } catch (err) {
       return sendToCli({ status: 500, msg: "Error al eliminar equipo", detalle: err.message });

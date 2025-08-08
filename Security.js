@@ -1,3 +1,5 @@
+import fs from 'fs';
+
 const Security = class{
 constructor(){
     this.loadSentences();
@@ -6,7 +8,7 @@ constructor(){
 }
 
 loadSentences(){
-    let fs = require("fs");
+    // let fs = require("fs");
     fs.readFile("./config/sentences.json", 'utf8', (err, data)=>{
         this.sentences = JSON.parse(data);        
     })
@@ -20,11 +22,13 @@ getKey(req, endpoint){
     return req.profile_na+"_" + req.action_de+"_" + endpoint;
 }
 
-getAllPermission(res, r){
+async getAllPermission(res, r){
     this.permission.clear();
-    for(let i = 0; i < r.rows.length; i++){
-       let k = r.rows[i].profile_na+"_"+r.rows[i].action_de+"_"+r.rows[i].endpoint_de;
-         this.permission.set(k, true);
+     const rs =  await db.exe("security", "getAllPermission",[]);
+    
+    for(let i = 0; i < rs.rows.length; i++){
+       let k = rs.rows[i].profile_de+"_"+rs.rows[i].de_action+"_"+rs.rows[i].de_endpoint;
+        this.permission.set(k, true);         
     }
 }
 

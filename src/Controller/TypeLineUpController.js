@@ -18,7 +18,10 @@ class TypeLineUpController {
       return sendToCli({ status: 400, msg: "ID y todos los campos son requeridos para actualizar" });
 
     try {
-      await db.exe("sport", "updateTypeLineUp", [de_line_up, na_line_up, sport_id, type_line_up_id]);
+      const result = await db.exe("sport", "updateTypeLineUp", [de_line_up, na_line_up, sport_id, type_line_up_id]);
+       if (result.rowCount === 0) {
+        return sendToCli({ status: 404, msg: "tipo de alineacion no encontrada" });
+      }
       return sendToCli({ status: 200, msg: "Tipo de alineación actualizada correctamente" });
     } catch (err) {
       return sendToCli({ status: 500, msg: "Error al actualizar tipo de alineación", detalle: err.message });
@@ -31,7 +34,10 @@ class TypeLineUpController {
       return sendToCli({ status: 400, msg: "ID requerido para eliminar" });
 
     try {
-      await db.exe("sport", "deleteTypeLineUp", [type_line_up_id]);
+     const result = await db.exe("sport", "deleteTypeLineUp", [type_line_up_id]);
+       if (result.rowCount === 0) {
+        return sendToCli({ status: 404, msg: "tipo de alineacion no encontrada" });
+      }
       return sendToCli({ status: 200, msg: "Tipo de alineación eliminada correctamente" });
     } catch (err) {
       return sendToCli({ status: 500, msg: "Error al eliminar tipo de alineación", detalle: err.message });

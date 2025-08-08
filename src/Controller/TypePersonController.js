@@ -18,7 +18,10 @@ class TipoPersonaController {
       return sendToCli({ status: 400, msg: "ID y descripción son requeridos" });
 
     try {
-      await db.exe("security", "updateTypePerson", [de_type_person, id_type_person]);
+      const result = await db.exe("security", "updateTypePerson", [de_type_person, id_type_person]);
+       if (result.rowCount === 0) {
+        return sendToCli({ status: 404, msg: "tipo persona no encontrada" });
+      }
       return sendToCli({ status: 200, msg: "Tipo de persona actualizado" });
     } catch (err) {
       return sendToCli({ status: 500, msg: "Error al actualizar tipo de persona", detalle: err.message });
@@ -26,12 +29,15 @@ class TipoPersonaController {
   }
 
   async borrar(req, res) {
-    const { id_type_person } = req.body;
+    const { id_type_person } = req.query;
     if (!id_type_person)
       return sendToCli({ status: 400, msg: "ID requerido" });
 
     try {
-      await db.exe("security", "deleteTypePerson", [id_type_person]);
+     const result = await db.exe("security", "deleteTypePerson", [id_type_person]);
+       if (result.rowCount === 0) {
+        return sendToCli({ status: 404, msg: "tipo persona no encontrada" });
+      }
       return sendToCli({ status: 200, msg: "Tipo de persona eliminado" });
     } catch (err) {
       return sendToCli({ status: 500, msg: "Error al eliminar tipo de persona", detalle: err.message });

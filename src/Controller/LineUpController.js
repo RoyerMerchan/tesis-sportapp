@@ -18,7 +18,10 @@ class LineUpController {
       return sendToCli({ status: 400, msg: "ID y todos los campos son requeridos" });
 
     try {
-      await db.exe("sport", "updateLineUp", [position_id, type_line_up_id, team_member_id, de_line_up, team_comp_id, line_up_id]);
+     const result = await db.exe("sport", "updateLineUp", [position_id, type_line_up_id, team_member_id, de_line_up, team_comp_id, line_up_id]);
+       if (result.rowCount === 0) {
+        return sendToCli({ status: 404, msg: "alineacion no encontrada" });
+      }
       return sendToCli({ status: 200, msg: "Alineación actualizada correctamente" });
     } catch (err) {
       return sendToCli({ status: 500, msg: "Error al actualizar alineación", detalle: err.message });
@@ -26,12 +29,15 @@ class LineUpController {
   }
 
   async borrar(req, res) {
-    const { line_up_id } = req.body;
+    const { line_up_id } = req.query;
     if (!line_up_id)
       return sendToCli({ status: 400, msg: "ID requerido para eliminar" });
 
     try {
-      await db.exe("sport", "deleteLineUp", [line_up_id]);
+      const result = await db.exe("sport", "deleteLineUp", [line_up_id]);
+       if (result.rowCount === 0) {
+        return sendToCli({ status: 404, msg: "alineacion no encontrada" });
+      }
       return sendToCli({ status: 200, msg: "Alineación eliminada correctamente" });
     } catch (err) {
       return sendToCli({ status: 500, msg: "Error al eliminar alineación", detalle: err.message });

@@ -26,6 +26,15 @@ sessionExist(req){
     }else return false;
 }
 
+getSessionObj(req){
+    return {
+         userId : req.session.userId,
+         userName : req.session.userName,
+         profileId : req.session.profileId,
+         profileDe : req.session.profileDe
+    }
+}
+
 createSession(req, res){
     db.exe("security", "getUser",[req.body.user, req.body.password]).then(r=>{
         // console.log("respuesta de la base de datos", r);
@@ -36,7 +45,6 @@ createSession(req, res){
             req.session.userName = r.rows[0].na_us;
             req.session.profileId = r.rows[0].id_pro;
             req.session.profileDe = r.rows[0].de_pro;
-            console.log(req.session);
             
             sendToCli("sesion creada..!")
         }else{

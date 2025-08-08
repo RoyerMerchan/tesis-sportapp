@@ -18,7 +18,10 @@ class SportStatisticController {
       return sendToCli({ status: 400, msg: "ID y todos los campos son requeridos" });
 
     try {
-      await db.exe("sport", "updateSportStatistic", [statistic_concept_id, team_member_id, comp_id, statistic, sport_statistic_id]);
+      const result = await db.exe("sport", "updateSportStatistic", [statistic_concept_id, team_member_id, comp_id, statistic, sport_statistic_id]);
+       if (result.rowCount === 0) {
+        return sendToCli({ status: 404, msg: "estadistica no encontrada" });
+      }
       return sendToCli({ status: 200, msg: "Estadística actualizada correctamente" });
     } catch (err) {
       return sendToCli({ status: 500, msg: "Error al actualizar estadística", detalle: err.message });
@@ -31,7 +34,10 @@ class SportStatisticController {
       return sendToCli({ status: 400, msg: "ID requerido para eliminar" });
 
     try {
-      await db.exe("sport", "deleteSportStatistic", [sport_statistic_id]);
+     const result = await db.exe("sport", "deleteSportStatistic", [sport_statistic_id]);
+       if (result.rowCount === 0) {
+        return sendToCli({ status: 404, msg: "estadistica no encontrada" });
+      }
       return sendToCli({ status: 200, msg: "Estadística eliminada correctamente" });
     } catch (err) {
       return sendToCli({ status: 500, msg: "Error al eliminar estadística", detalle: err.message });

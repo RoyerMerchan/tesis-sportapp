@@ -18,7 +18,10 @@ class TypeCompetitionController {
       return sendToCli({ status: 400, msg: "Todos los campos son requeridos para actualizar" });
 
     try {
-      await db.exe("sport", "updateTypeCompetition", [sport_id, na_type_comp, type_comp_id]);
+      const result = await db.exe("sport", "updateTypeCompetition", [sport_id, na_type_comp, type_comp_id]);
+       if (result.rowCount === 0) {
+        return sendToCli({ status: 404, msg: "tipo competencia no encontrada" });
+      }
       return sendToCli({ status: 200, msg: "Tipo de competición actualizada correctamente" });
     } catch (err) {
       return sendToCli({ status: 500, msg: "Error al actualizar tipo de competición", detalle: err.message });
@@ -31,7 +34,10 @@ class TypeCompetitionController {
       return sendToCli({ status: 400, msg: "type_comp_id requerido para eliminar" });
 
     try {
-      await db.exe("sport", "deleteTypeCompetition", [type_comp_id]);
+      const result = await db.exe("sport", "deleteTypeCompetition", [type_comp_id]);
+       if (result.rowCount === 0) {
+        return sendToCli({ status: 404, msg: "tipo competencia no encontrada" });
+      }
       return sendToCli({ status: 200, msg: "Tipo de competición eliminada correctamente" });
     } catch (err) {
       return sendToCli({ status: 500, msg: "Error al eliminar tipo de competición", detalle: err.message });

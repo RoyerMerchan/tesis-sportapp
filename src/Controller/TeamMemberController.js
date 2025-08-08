@@ -18,7 +18,10 @@ class TeamMemberController {
       return sendToCli({ status: 400, msg: "ID y todos los campos son requeridos" });
 
     try {
-      await db.exe("sport", "updateTeamMember", [team_id, person_id, num_team_member, team_member_id]);
+     const result = await db.exe("sport", "updateTeamMember", [team_id, person_id, num_team_member, team_member_id]);
+       if (result.rowCount === 0) {
+        return sendToCli({ status: 404, msg: "miembro no encontrada" });
+      }
       return sendToCli({ status: 200, msg: "Miembro actualizado correctamente" });
     } catch (err) {
       return sendToCli({ status: 500, msg: "Error al actualizar miembro", detalle: err.message });
@@ -26,12 +29,15 @@ class TeamMemberController {
   }
 
   async borrar(req, res) {
-    const { team_member_id } = req.body;
+    const { team_member_id } = req.query;
     if (!team_member_id)
       return sendToCli({ status: 400, msg: "ID requerido para eliminar" });
 
     try {
-      await db.exe("sport", "deleteTeamMember", [team_member_id]);
+     const result = await db.exe("sport", "deleteTeamMember", [team_member_id]);
+       if (result.rowCount === 0) {
+        return sendToCli({ status: 404, msg: "miembro no encontrado" });
+      }
       return sendToCli({ status: 200, msg: "Miembro eliminado correctamente" });
     } catch (err) {
       return sendToCli({ status: 500, msg: "Error al eliminar miembro", detalle: err.message });

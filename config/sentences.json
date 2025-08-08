@@ -2,7 +2,7 @@
     "security":{
         "getUser": "select u.user_id, u.na_user, p.profile_id, p.de_profile from profile_user pu inner join profile p on pu.profile_id = p.profile_id inner join public.user u on pu.user_id = u.user_id where u.na_user = $1 and u.pa_user= $2",
     
-        "insertUser":"INSERT INTO public.user (na_user, pa_user, em_user, person_id) VALUES ($1, $2, $3, $4);",
+        "insertUser":"INSERT INTO public.user (na_user, pa_user, em_user, person_id, profile_id) VALUES ($1, $2, $3, $4, $5);",
         "getUserByUsername": "select * from public.user where na_user = $1",
         "customQuery": "UPDATE public.user SET na_user = $1 , pa_user = $2 WHERE user_id = $3;",
         "deleteUser": "DELETE FROM public.user WHERE user_id = $1",
@@ -11,41 +11,42 @@
         "insertInstitution": "INSERT INTO institution (na_institucion) VALUES ($1);",
         "updateInstitution": "UPDATE institution SET na_institucion = $1 WHERE institucion_id = $2;",
         "deleteInstitution": "DELETE FROM institution WHERE institucion_id = $1;",
-        "selectInstitutions": "SELECT institucion_id, name_institutions FROM institution ORDER BY institucion_id;",
+        "selectInstitutions": "SELECT institucion_id, na_institucion FROM institution ORDER BY institucion_id;",
 
         "insertPosition": "INSERT INTO position (na_position) VALUES ($1);",
         "updatePosition": "UPDATE position SET na_position = $1 WHERE position_id = $2;",
         "deletePosition": "DELETE FROM position WHERE position_id = $1;",
         "selectPositions": "SELECT position_id, na_position FROM position ORDER BY position_id;",
 
-        "insertProfile": "INSERT INTO profile (de_profile) VALUES ($1);",
-        "updateProfile": "UPDATE profile SET de_profile = $1 WHERE profile_id = $2;",
+        "insertProfile": "INSERT INTO profile (profile_de) VALUES ($1);",
+        "updateProfile": "UPDATE profile SET profile_de = $1 WHERE profile_id = $2;",
         "deleteProfile": "DELETE FROM profile WHERE profile_id = $1;",      
-        "selectProfiles": "SELECT profile_id, de_profile FROM profile ORDER BY profile_id;",
+        "selectProfiles": "SELECT profile_id, profile_de FROM profile ORDER BY profile_id;",
 
         "insertTypePerson": "INSERT INTO type_person (de_type_person) VALUES ($1);",
         "updateTypePerson": "UPDATE type_person SET de_type_person = $1 WHERE type_person_id = $2;",
         "deleteTypePerson": "DELETE FROM type_person WHERE type_person_id = $1;",   
         "selectTypePersons": "SELECT type_person_id, de_type_person FROM type_person ORDER BY type_person_id;",
 
-        "insertPerson": "INSERT INTO person (na_person, ln_person, type_person_id) VALUES ($1, $2, $3);",
-        "updatePerson": "UPDATE person SET na_person = $1, ln_person = $2, type_person_id = $3 WHERE person_id = $4;",
-        "deletePerson": "DELETE FROM person WHERE person_id = $1;",
-        "selectPersons": "SELECT p.person_id, p.na_person, p.ln_person, tp.de_type_person FROM person p JOIN type_person tp ON p.type_person_id = tp.type_person_id ORDER BY p.person_id;"
-
-    },
-    "sport":{
-
         "insertEvent": "INSERT INTO event (na_event) VALUES ($1);",
         "updateEvent": "UPDATE event SET na_event = $1 WHERE event_id = $2;",
         "deleteEvent": "DELETE FROM event WHERE event_id = $1;",
         "selectEvents": "SELECT event_id, na_event FROM event ORDER BY event_id;",
         "selectEventById": "SELECT event_id, na_event FROM event WHERE event_id = $1;",
+        
+        "insertPerson": "INSERT INTO person (type_person_id, na_person, ln_person ) VALUES ($1, $2, $3);",
+        "updatePerson": "UPDATE person SET na_person = $1, ln_person = $2, type_person_id = $3 WHERE person_id = $4;",
+        "deletePerson": "DELETE FROM person WHERE person_id = $1;",
+        "selectPersons": "SELECT p.person_id, p.na_person, p.ln_person, tp.de_type_person FROM person p JOIN type_person tp ON p.type_person_id = tp.type_person_id ORDER BY p.person_id;",
+        "getAllPermission": "select profile_de , de_action , de_endpoint  from permission_theory pt inner join profile p on p.profile_id = pt.profile_id inner join public.action a on a.action_id = pt.action_id inner join endpoint e on e.endpoint_id = pt.endpoint_id "
+    },
+    "sport":{
 
-        "inserPlaceEvent": "INSERT INTO place_event (na_place_event, ubi_place_event) VALUES ($1, $2);",
-        "updatePlaceEventNameAndUbication": "UPDATE place_event SET na_place_event = $1, ubi_place_event = $2 WHERE id_place_event = $3;",
-        "updatePlaceEventNameOnly": "UPDATE place_event SET na_place_event = $1 WHERE id_place_event = $2;",
-        "updatePlaceEventUbicationOnly": "UPDATE place_event SET ubi_place_event = $1 WHERE id_place_event = $2;",
+
+        "insertPlaceEvent": "INSERT INTO place_event (na_place_event, ubi_place_event) VALUES ($1, $2);",
+        "updatePlaceEventNameAndUbication": "UPDATE place_event SET na_place_event = $1, ubi_place_event = $2 WHERE place_event_id = $3;",
+        "updatePlaceEventNameOnly": "UPDATE place_event SET na_place_event = $1 WHERE place_event_id = $2;",
+        "updatePlaceEventUbicationOnly": "UPDATE place_event SET ubi_place_event = $1 WHERE place_event_id = $2;",
         "deletePlaceEvent": "DELETE FROM place_event WHERE place_event_id = $1;",
         "selectPlaceEvents": "SELECT place_event_id, na_place_event, ubi_place_event FROM place_event ORDER BY place_event_id;",
 

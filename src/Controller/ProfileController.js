@@ -18,7 +18,10 @@ class ProfileController {
       return sendToCli({ status: 400, msg: "ID y nueva descripción son requeridos" });
 
     try {
-      await db.exe("security", "updateProfile", [profile_de, id_profile]);
+     const result = await db.exe("security", "updateProfile", [profile_de, id_profile]);
+       if (result.rowCount === 0) {
+        return sendToCli({ status: 404, msg: "perfil no encontrado" });
+      }
       return sendToCli({ status: 200, msg: "Perfil actualizado correctamente" });
     } catch (err) {
       return sendToCli({ status: 500, msg: "Error al actualizar perfil", detalle: err.message });
@@ -26,12 +29,15 @@ class ProfileController {
   }
 
   async borrar(req, res) {
-    const { id_profile } = req.body;
+    const { id_profile } = req.query;
     if (!id_profile)
       return sendToCli({ status: 400, msg: "ID requerido para eliminar perfil" });
 
     try {
-      await db.exe("security", "deleteProfile", [id_profile]);
+     const result = await db.exe("security", "deleteProfile", [id_profile]);
+       if (result.rowCount === 0) {
+        return sendToCli({ status: 404, msg: "perfil no encontrada" });
+      }
       return sendToCli({ status: 200, msg: "Perfil eliminado correctamente" });
     } catch (err) {
       return sendToCli({ status: 500, msg: "Error al eliminar perfil", detalle: err.message });

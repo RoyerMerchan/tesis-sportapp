@@ -18,7 +18,11 @@ class CompetitionController {
       return sendToCli({ status: 400, msg: "ID y todos los campos son requeridos" });
 
     try {
-      await db.exe("sport", "updateCompetition", [event_id, place_event_id, type_comp_id, date_competition, hour_competition, comp_id]);
+     const result = await db.exe("sport", "updateCompetition", [event_id, place_event_id, type_comp_id, date_competition, hour_competition, comp_id]);
+       if (result.rowCount === 0) {
+        return sendToCli({ status: 404, msg: "competencia no encontrada" });
+      }
+
       return sendToCli({ status: 200, msg: "Competencia actualizada correctamente" });
     } catch (err) {
       return sendToCli({ status: 500, msg: "Error al actualizar competencia", detalle: err.message });
@@ -26,12 +30,15 @@ class CompetitionController {
   }
 
   async borrar(req, res) {
-    const { comp_id } = req.body;
+    const { comp_id } = req.query;
     if (!comp_id)
       return sendToCli({ status: 400, msg: "ID requerido para eliminar" });
 
     try {
-      await db.exe("sport", "deleteCompetition", [comp_id]);
+     const result =  await db.exe("sport", "deleteCompetition", [comp_id]);
+      if (result.rowCount === 0) {
+        return sendToCli({ status: 404, msg: "competencia no encontrada" });
+      }
       return sendToCli({ status: 200, msg: "Competencia eliminada correctamente" });
     } catch (err) {
       return sendToCli({ status: 500, msg: "Error al eliminar competencia", detalle: err.message });

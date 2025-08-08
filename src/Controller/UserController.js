@@ -5,10 +5,10 @@ const saltRounds = 10;
 
 class UserController {
 
-  async insert(req, res) {
-  const { username, password, institutional_email, id_person } = req.body;
+  async insertar(req, res) {
+  const { username, password, institutional_email, id_person, id_profile } = req.body;
 
-  if (!username || !password || !institutional_email || !id_person) {
+  if (!username || !password || !institutional_email || !id_person, id_profile) {
     return sendToCli({ status: 400, msg: "Campos requeridos" });
   }
 
@@ -27,18 +27,20 @@ class UserController {
       username,
       hashedPassword,
       institutional_email,
-      id_person
+      id_person,
+      id_profile
     ]);
 
-    return sendToCli({ status: 201, msg: "Usuario insertado correctamente", resultado });
+    return sendToCli({ "status": 201, "msg": "Usuario insertado correctamente", resultado });
   } catch (err) {
-    return sendToCli({ status: 500, msg: "Error al insertar", detalle: err.message });
+    return sendToCli({ "status": 500, "msg": "Error al insertar..." });
+
   }
 }
 
 
 
- async update(req, res) {
+ async actualizar(req, res) {
   const { id, username, password } = req.body;
   if (!id || (!username && !password)) {
     return sendToCli({ status: 400, msg: "Datos insuficientes" });
@@ -64,7 +66,7 @@ class UserController {
     const query = `UPDATE users SET ${campos.join(', ')} WHERE id = $${i}`;
 
     // Ejecutar con db.exe
-    const resultado = await db.exe("security", "customQuery", [query, valores]);
+    const resultado = await db.exe("security", "customQuery",  valores);
 
     return sendToCli({ status: 200, msg: "Usuario actualizado", resultado });
   } catch (err) {
@@ -72,8 +74,10 @@ class UserController {
   }
 }
 
-async delete(req, res) {
-  const { id } = req.body;
+async borrar(req, res) {
+  const { id } = req.query;
+  console.log(id);
+  
   if (!id) return sendToCli({ status: 400, msg: "ID requerido" });
 
   try {
@@ -85,7 +89,7 @@ async delete(req, res) {
 }
 
 
-   async select(req, res) {
+   async seleccionar(req, res) {
   const { id } = req.body;
   if (!id) return sendToCli({ status: 400, msg: "ID requerido" });
 
