@@ -29,7 +29,7 @@ class TypeLineUpController {
   }
 
   async borrar(req, res) {
-    const { type_line_up_id } = req.body;
+    const { type_line_up_id } = req.query;
     if (!type_line_up_id)
       return sendToCli({ status: 400, msg: "ID requerido para eliminar" });
 

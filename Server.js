@@ -123,7 +123,7 @@ app.post("/Institution",(req,res)=>{
 }
 
 global.checkPermission = (req, endpoint)=> {
-  return true;
+  // return true;
   if(sess.sessionExist(req)){
     let obj = sess.getSessionObj(req);
     let k = security.getKey(req, endpoint);

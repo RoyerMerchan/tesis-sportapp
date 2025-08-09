@@ -20,7 +20,7 @@ class SportStatisticController {
     try {
       const result = await db.exe("sport", "updateSportStatistic", [statistic_concept_id, team_member_id, comp_id, statistic, sport_statistic_id]);
        if (result.rowCount === 0) {
-        return sendToCli({ status: 404, msg: "estadistica no encontrada" });
+        return sendToCli({ status: 404, msg: "competencia no encontrada" });
       }
       return sendToCli({ status: 200, msg: "Estadística actualizada correctamente" });
     } catch (err) {
@@ -29,7 +29,7 @@ class SportStatisticController {
   }
 
   async borrar(req, res) {
-    const { sport_statistic_id } = req.body;
+    const { sport_statistic_id } = req.query;
     if (!sport_statistic_id)
       return sendToCli({ status: 400, msg: "ID requerido para eliminar" });
 

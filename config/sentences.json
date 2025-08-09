@@ -62,10 +62,10 @@
         "deleteTypeCompetition": "DELETE FROM type_competition WHERE type_comp_id = $1;",
         "selectTypeCompetition": "SELECT type_comp_id, sport_id, na_type_comp FROM type_competition ORDER BY type_comp_id;",
 
-        "insertTypeLineUp": "INSERT INTO type_line-up (de_line-up, na_line-up, sport_id) VALUES ($1, $2, $3);",
-        "updateTypeLineUp": "UPDATE type_line-up SET de_line-up = $1, na_line-up = $2, sport_id = $3 WHERE type_line-up_id = $4;",
-        "deleteTypeLineUp": "DELETE FROM type_line-up WHERE type_line-up_id = $1;",
-        "selectTypeLineUp": "SELECT type_line-up_id, de_line-up, na_line-up, sport_id FROM type_line-up ORDER BY type_line-up_id;",
+        "insertTypeLineUp": "INSERT INTO type_line_up (de_line_up, na_line_up, sport_id) VALUES ($1, $2, $3);",
+        "updateTypeLineUp": "UPDATE type_line_up SET de_line_up = $1, na_line_up = $2, sport_id = $3 WHERE type_line_up_id = $4;",
+        "deleteTypeLineUp": "DELETE FROM type_line_up WHERE type_line_up_id = $1;",
+        "selectTypeLineUp": "SELECT type_line_up_id, de_line_up, na_line_up, sport_id FROM type_line_up ORDER BY type_line_up_id;",
 
         "insertTeam": "INSERT INTO team (na_team, sport_id, institution_id) VALUES ($1, $2, $3);",
         "updateTeam": "UPDATE team SET na_team = $1, sport_id = $2, institution_id = $3 WHERE team_id = $4;",
@@ -78,9 +78,9 @@
         "selectTeamMembers": "SELECT team_member_id, team_id, person_id, num_team_member FROM team_member ORDER BY team_member_id;",
 
         "insertCompetition": "INSERT INTO competition (event_id, place_event_id, type_comp_id, date_competition, hour_competition) VALUES ($1, $2, $3, $4, $5);",
-        "updateCompetition": "UPDATE competition SET date_competition = $1, hour_competition = $2, type_comp_id = $3, event_id = $4, place_event_id = $5 WHERE competition_id = $6;",
-        "deleteCompetition": "DELETE FROM competition WHERE competition_id = $1;",
-        "selectCompetitions": "SELECT competition_id, date_competition, hour_competition, type_comp_id, event_id, place_event_id FROM competition ORDER BY competition_id;",
+        "updateCompetition": "UPDATE competition SET  type_comp_id = $1, event_id = $2, place_event_id =$3, date_competition = $4, hour_competition = $5  WHERE comp_id = $6;",
+        "deleteCompetition": "DELETE FROM competition WHERE comp_id = $1;",
+        "selectCompetitions": "SELECT comp_id, date_competition, hour_competition, type_comp_id, event_id, place_event_id FROM competition ORDER BY comp_id;",
 
         "insertSportStatistic": "INSERT INTO sport_statistic (statistic_concept_id, team_member_id, comp_id, statistic) VALUES ($1, $2, $3, $4);",
         "updateSportStatistic": "UPDATE sport_statistic SET statistic_concept_id = $1, team_member_id = $2, comp_id = $3, statistic = $4 WHERE sport_statistic_id = $5;",
@@ -90,7 +90,7 @@
         "insertLineUp": "INSERT INTO line_up (position_id, type_line_up_id, team_member_id, de_line_up, team_comp_id) VALUES ($1, $2, $3, $4, $5);",
         "updateLineUp": "UPDATE line_up SET position_id = $1, type_line_up_id = $2, team_member_id = $3, de_line_up = $4, team_comp_id = $5 WHERE line_up_id = $6;",
         "deleteLineUp": "DELETE FROM line_up WHERE line_up_id = $1;",
-        "selectLineUps": "SELECT line_up_id, position_id, type_line_up_id, team_member_id, de_line_up, team_comp_id FROM line_up ORDER BY line_up_id;"
+        "selectLineUps": "SELECT * from line_up;"
 
 
 

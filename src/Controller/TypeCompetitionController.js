@@ -29,7 +29,7 @@ class TypeCompetitionController {
   }
 
   async borrar(req, res) {
-    const { type_comp_id } = req.body;
+    const { type_comp_id } = req.query;
     if (!type_comp_id)
       return sendToCli({ status: 400, msg: "type_comp_id requerido para eliminar" });
 
