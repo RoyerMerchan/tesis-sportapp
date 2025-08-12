@@ -3,6 +3,7 @@ import positionController from '../Controller/PositionController.js';
 
 const router = express.Router();
 
+// Define the routes for Position
 router.get('/', positionController.seleccionar)
 router.post('/', positionController.insertar)
 router.put('/', positionController.actualizar)

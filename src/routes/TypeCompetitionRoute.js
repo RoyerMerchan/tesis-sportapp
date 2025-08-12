@@ -3,6 +3,7 @@ import typeCompetitionController from '../Controller/TypeCompetitionController.j
 
 const router = express.Router();
 
+// Define the routes for TypeCompetition
 router.get('/', typeCompetitionController.seleccionar)
 router.post('/', typeCompetitionController.insertar)
 router.put('/', typeCompetitionController.actualizar)

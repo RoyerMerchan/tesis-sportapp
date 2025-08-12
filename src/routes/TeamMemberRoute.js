@@ -3,6 +3,7 @@ import teamMemberController from '../Controller/TeamMemberController.js';
 
 const router = express.Router();
 
+// Define the routes for TeamMember
 router.get('/', teamMemberController.seleccionar)
 router.post('/', teamMemberController.insertar)
 router.put('/', teamMemberController.actualizar)

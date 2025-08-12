@@ -3,6 +3,7 @@ import lineUpController from '../Controller/LineUpController.js';
 
 const router = express.Router();
 
+// Define the routes for LineUp
 router.get('/', lineUpController.seleccionar)
 router.post('/', lineUpController.insertar)
 router.put('/', lineUpController.actualizar)
