@@ -55,6 +55,8 @@ createSession(req, res){
         sendToCli({"status":500, "msg":"error en la base de datos..."});
     });
 }
+
+
 }
 
 export default Session;

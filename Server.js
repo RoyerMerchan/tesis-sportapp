@@ -70,43 +70,43 @@ app.post('/sesion',(req, res)=>{
   }
 });
 
-app.post("/Institution",(req,res)=>{
-  let i = new Institution();
-  let rs = null;
-  if(checkPermission(req, 'Institution')){
-    switch (req.body.action) {
-    case '1': { 
-      try{
-        rs = i.insertInstitution(req, res);
-        return rs; 
-      }  
-      catch(e){
+// app.post("/Institution",(req,res)=>{
+//   let i = new Institution();
+//   let rs = null;
+//   if(checkPermission(req, 'Institution')){
+//     switch (req.body.action) {
+//     case '1': { 
+//       try{
+//         rs = i.insertInstitution(req, res);
+//         return rs; 
+//       }  
+//       catch(e){
         
-      }
-      finally{
-        i = null;
-        rs = null;
-      }      
-    }
-    case '2':
-      return null
+//       }
+//       finally{
+//         i = null;
+//         rs = null;
+//       }      
+//     }
+//     case '2':
+//       return null
 
-    case '3':
-      return null
+//     case '3':
+//       return null
 
-    case '4':
-      return null
+//     case '4':
+//       return null
       
-      default:
-        return res.status(400).json({ error: "Acción no válida para tipo_persona" });
+//       default:
+//         return res.status(400).json({ error: "Acción no válida para tipo_persona" });
         
-      }
-    }
-    else{
-      sendToCli({'status':580, 'msg':'No tiene Permiso...'})
-    }
+//       }
+//     }
+//     else{
+//       sendToCli({'status':580, 'msg':'No tiene Permiso...'})
+//     }
     
-  })
+//   })
   
   global.sendToCli = (j)=>{
     let d = {
