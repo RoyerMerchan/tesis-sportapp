@@ -42,6 +42,8 @@ global.security = new Security();
 let RESP = null;
 let REQ = null;
 
+security.ge
+
 app.use((req, res, next)=>{
   RESP = res;
   REQ = req;
@@ -63,6 +65,7 @@ app.post('/sesion',(req, res)=>{
   else{
     if(req.body.user && req.body.password){
       sess.createSession(req,res);
+      
     }
     else{
       res.send("{'status':404, 'msg':'Datos invalidos'}");
@@ -134,6 +137,20 @@ global.checkPermission = (req, endpoint)=> {
     return false;
   }
 }
+
+app.use((req, res, next)=>{
+console.log('middleware ejecutado');
+if(sess.sessionExist(req)){
+//obtener el endpoint que se esta ejecutando, obtener el metodo que se esta utilizando, y a partir de la request obtener la sesion
+//para saber que perfil tiene y asi validar los permisos
+  console.log("tiene sesion");
+  next(); 
+}
+else{
+  sendToCli({status: 403, msg: "sesion invalida"})
+}
+
+})
 
 
 //use routes

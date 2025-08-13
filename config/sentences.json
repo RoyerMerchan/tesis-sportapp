@@ -1,6 +1,6 @@
 {
     "security":{
-        "getUser": "select u.user_id, u.na_user, p.profile_id, p.de_profile from profile_user pu inner join profile p on pu.profile_id = p.profile_id inner join public.user u on pu.user_id = u.user_id where u.na_user = $1 and u.pa_user= $2",
+        "getUser": "select u.user_id, u.na_user, u.pa_user, u.profile_id, p.profile_de from public.user u inner join public.profile p on p.profile_id = u.profile_id where u.na_user = $1",
     
         "insertUser":"INSERT INTO public.user (na_user, pa_user, em_user, person_id, profile_id) VALUES ($1, $2, $3, $4, $5);",
         "getUserByUsername": "select * from public.user where na_user = $1",

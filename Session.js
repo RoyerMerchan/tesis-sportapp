@@ -1,4 +1,5 @@
 import session from 'express-session';
+import bcrypt from 'bcrypt'
 
 
 const Session = class{
@@ -35,20 +36,28 @@ getSessionObj(req){
     }
 }
 
-createSession(req, res){
-    db.exe("security", "getUser",[req.body.user, req.body.password]).then(r=>{
+ createSession(req, res){
+    db.exe("security", "getUser",[req.body.user]).then(async r=>{
         // console.log("respuesta de la base de datos", r);
         // console.log( req.body.password);
+        console.log(r.rows);
         
         if(r.rows.length > 0){
-            req.session.userId = r.rows[0].id_us;
-            req.session.userName = r.rows[0].na_us;
-            req.session.profileId = r.rows[0].id_pro;
-            req.session.profileDe = r.rows[0].de_pro;
+            const {user_id, na_user, pa_user, profile_id, profile_de} = r.rows[0]
+            if(!(await bcrypt.compare(req.body.password, pa_user))){
+
+                return sendToCli({status: 403, msg: "credenciales invalidas"})
+            }
+            req.session.userId = user_id;
+            req.session.userName = na_user;
+            req.session.profileId = profile_id;
+            req.session.profileDe = profile_de;
+            // hacer otra consulta para obtener del profile_id los permisos del usuario para devolselo en data al momento de hacer login
+            sendToCli({status: 200, msg: "login exitoso", data: {}})
             
-            sendToCli("sesion creada..!")
         }else{
-            sendToCli({"status":500, "msg":"error en los datos..."});
+            
+            sendToCli({status: 403, msg: "credenciales invalidas"})
         }
     }).catch(e=>{
         console.error("error en la consulta",e);
