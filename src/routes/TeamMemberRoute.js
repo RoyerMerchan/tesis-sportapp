@@ -7,6 +7,7 @@ const router = express.Router();
 router.get('/', teamMemberController.seleccionar)
 router.post('/', teamMemberController.insertar)
 router.put('/', teamMemberController.actualizar)
-router.delete('/', teamMemberController.borrar)
+router.delete('/:team_member_id', teamMemberController.borrar)
+router.get('/filter/:team_id', teamMemberController.seleccionarByTeam)
 
 export default router;

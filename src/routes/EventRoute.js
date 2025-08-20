@@ -6,7 +6,7 @@ import EventController from '../Controller/EventController.js';
 router.get('/', EventController.seleccionar)
 router.post('/', EventController.insertar)
 router.put('/', EventController.actualizar)
-router.delete('/', EventController.borrar)
+router.delete('/:id_event', EventController.borrar)
 
 
 

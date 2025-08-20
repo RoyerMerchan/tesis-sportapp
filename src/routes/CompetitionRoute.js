@@ -6,7 +6,7 @@ const router = Router();
 router.get('/', CompetitionController.seleccionar)
 router.post('/', CompetitionController.insertar)
 router.put('/', CompetitionController.actualizar)
-router.delete('/', CompetitionController.borrar)
+router.delete('/:comp_id', CompetitionController.borrar)
 
 
 

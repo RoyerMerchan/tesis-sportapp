@@ -7,6 +7,6 @@ import TipoPersonaController from '../Controller/TypePersonController.js';
 router.get('/', TipoPersonaController.seleccionar)
 router.post('/', TipoPersonaController.insertar)
 router.put('/', TipoPersonaController.actualizar)
-router.delete('/', TipoPersonaController.borrar)
+router.delete('/:id_type_person', TipoPersonaController.borrar)
 
 export default router;

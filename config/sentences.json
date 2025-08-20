@@ -2,11 +2,16 @@
     "security":{
         "getUser": "select u.user_id, u.na_user, u.pa_user, u.profile_id, p.profile_de from public.user u inner join public.profile p on p.profile_id = u.profile_id where u.na_user = $1",
     
-        "insertUser":"INSERT INTO public.user (na_user, pa_user, em_user, person_id, profile_id) VALUES ($1, $2, $3, $4, $5);",
+        "insertUser":"INSERT INTO public.user (na_user, pa_user, em_user, person_id, profile_id) VALUES ($1, $2, $3, $4, $5) returning *",
         "getUserByUsername": "select * from public.user where na_user = $1",
-        "customQuery": "UPDATE public.user SET na_user = $1 , pa_user = $2 WHERE user_id = $3;",
+        "updateU": "UPDATE public.user SET na_user = $1  WHERE user_id = $2;",
+        "updateP": "UPDATE public.user SET pa_user = $1 WHERE user_id = $2;",
+        "updateUP": "UPDATE public.user SET na_user = $1 , pa_user = $2 WHERE user_id = $3;",
         "deleteUser": "DELETE FROM public.user WHERE user_id = $1",
+        "userProfile": "select * from public.user where profile_id = $1",
         "selectUserById": "SELECT u.user_id, u.na_user, u.em_user, p.na_person, p.ln_person, p.type_person_id FROM public.user u JOIN person p ON u.person_id = p.person_id WHERE u.user_id = $1;",
+        "selectUsers": "SELECT u.user_id, u.na_user, u.em_user, p.na_person, p.ln_person, p.type_person_id FROM public.user u JOIN person p ON u.person_id = p.person_id ORDER BY u.user_id;",
+
 
         "insertInstitution": "INSERT INTO institution (na_institucion) VALUES ($1);",
         "updateInstitution": "UPDATE institution SET na_institucion = $1 WHERE institucion_id = $2;",
@@ -27,6 +32,7 @@
         "updateTypePerson": "UPDATE type_person SET de_type_person = $1 WHERE type_person_id = $2;",
         "deleteTypePerson": "DELETE FROM type_person WHERE type_person_id = $1;",   
         "selectTypePersons": "SELECT type_person_id, de_type_person FROM type_person ORDER BY type_person_id;",
+        
 
         "insertEvent": "INSERT INTO event (na_event) VALUES ($1);",
         "updateEvent": "UPDATE event SET na_event = $1 WHERE event_id = $2;",
@@ -34,10 +40,12 @@
         "selectEvents": "SELECT event_id, na_event FROM event ORDER BY event_id;",
         "selectEventById": "SELECT event_id, na_event FROM event WHERE event_id = $1;",
         
-        "insertPerson": "INSERT INTO person (type_person_id, na_person, ln_person ) VALUES ($1, $2, $3);",
+        "insertPerson": "INSERT INTO person (type_person_id, na_person, ln_person ) VALUES ($1, $2, $3) returning person_id;",
         "updatePerson": "UPDATE person SET na_person = $1, ln_person = $2, type_person_id = $3 WHERE person_id = $4;",
         "deletePerson": "DELETE FROM person WHERE person_id = $1;",
         "selectPersons": "SELECT p.person_id, p.na_person, p.ln_person, tp.de_type_person FROM person p JOIN type_person tp ON p.type_person_id = tp.type_person_id ORDER BY p.person_id;",
+        "selectPersonsByType": "SELECT p.person_id, p.na_person, p.ln_person, tp.de_type_person FROM person p JOIN type_person tp ON p.type_person_id = tp.type_person_id WHERE tp.type_person_id = $1;",
+
         "getAllPermission": "select profile_de , de_action , de_endpoint  from permission_theory pt inner join profile p on p.profile_id = pt.profile_id inner join public.action a on a.action_id = pt.action_id inner join endpoint e on e.endpoint_id = pt.endpoint_id "
     },
     "sport":{
@@ -60,37 +68,50 @@
         "insertTypeCompetition": "INSERT INTO type_competition (sport_id, na_type_comp) VALUES ($1, $2);",
         "updateTypeCompetition": "UPDATE type_competition SET sport_id = $1, na_type_comp = $2 WHERE type_comp_id = $3;",
         "deleteTypeCompetition": "DELETE FROM type_competition WHERE type_comp_id = $1;",
-        "selectTypeCompetition": "SELECT type_comp_id, sport_id, na_type_comp FROM type_competition ORDER BY type_comp_id;",
+        "selectTypeCompetition": "SELECT tc.type_comp_id, tc.sport_id, tc.na_type_comp, s.na_sport FROM type_competition tc join sport s on tc.sport_id = s.sport_id ORDER BY type_comp_id;",
+        "selectTypeCompetitionBySport": "SELECT tc.type_comp_id, tc.sport_id, tc.na_type_comp, s.na_sport FROM type_competition tc join sport s on tc.sport_id = s.sport_id WHERE tc.sport_id = $1 ORDER BY type_comp_id;",
+
 
         "insertTypeLineUp": "INSERT INTO type_line_up (de_line_up, na_line_up, sport_id) VALUES ($1, $2, $3);",
         "updateTypeLineUp": "UPDATE type_line_up SET de_line_up = $1, na_line_up = $2, sport_id = $3 WHERE type_line_up_id = $4;",
         "deleteTypeLineUp": "DELETE FROM type_line_up WHERE type_line_up_id = $1;",
-        "selectTypeLineUp": "SELECT type_line_up_id, de_line_up, na_line_up, sport_id FROM type_line_up ORDER BY type_line_up_id;",
+        "selectTypeLineUp": "SELECT tp.type_line_up_id, tp.de_line_up, tp.na_line_up, tp.sport_id, s.na_sport FROM type_line_up tp join sport s on tp.sport_id= s.sport_id ORDER BY tp.type_line_up_id;",
+        "selectTypeLineUpBySport": "SELECT tp.type_line_up_id, tp.de_line_up, tp.na_line_up, tp.sport_id, s.na_sport FROM type_line_up tp join sport s on tp.sport_id= s.sport_id WHERE tp.sport_id = $1 ORDER BY tp.type_line_up_id;",
 
         "insertTeam": "INSERT INTO team (na_team, sport_id, institution_id) VALUES ($1, $2, $3);",
         "updateTeam": "UPDATE team SET na_team = $1, sport_id = $2, institution_id = $3 WHERE team_id = $4;",
         "deleteTeam": "DELETE FROM team WHERE team_id = $1;",
-        "selectTeams": "SELECT team_id, na_team, sport_id, institution_id FROM team ORDER BY team_id;",
+        "selectTeams": "SELECT t.team_id, t.na_team, t.sport_id, s.na_sport, t.institution_id, i.na_institucion FROM team t JOIN sport s ON t.sport_id = s.sport_id JOIN institution i ON t.institution_id = i.institucion_id ORDER BY t.team_id;",
+        "selectTeamsBySportAndInst": "SELECT t.team_id, t.na_team, t.sport_id, s.na_sport, t.institution_id, i.na_institucion FROM team t JOIN sport s ON t.sport_id = s.sport_id JOIN institution i ON t.institution_id = i.institucion_id WHERE ($1::int IS NULL OR t.sport_id = $1) AND ($2::int IS NULL or t.institution_id=$2);",
+
 
         "insertTeamMember": "INSERT INTO team_member (team_id, person_id, num_team_member) VALUES ($1, $2, $3);",
-        "updateTeamMember": "UPDATE team_member SET team_id = $1, person_id = $2, num_team_member = $3 WHERE team_member_id = $4;",
+        "updateTeamMember": "UPDATE team_member SET team_id = $1, num_team_member = $2 WHERE team_member_id = $3;",
         "deleteTeamMember": "DELETE FROM team_member WHERE team_member_id = $1;",
-        "selectTeamMembers": "SELECT team_member_id, team_id, person_id, num_team_member FROM team_member ORDER BY team_member_id;",
+        "selectTeamMembers": "SELECT t.team_member_id, t.team_id, tm.na_team, t.person_id, p.na_person, p.ln_person, t.num_team_member FROM team_member t join team tm on t.team_id = tm.team_id join person p on p.person_id = t.person_id ORDER BY team_member_id;",
+        "selectTeamMembersByTeam": "SELECT t.team_member_id, t.team_id, tm.na_team, t.person_id, p.na_person, p.ln_person, t.num_team_member FROM team_member t join team tm on t.team_id = tm.team_id join person p on p.person_id = t.person_id WHERE t.team_id = $1 ORDER BY team_member_id;",
 
         "insertCompetition": "INSERT INTO competition (event_id, place_event_id, type_comp_id, date_competition, hour_competition) VALUES ($1, $2, $3, $4, $5);",
-        "updateCompetition": "UPDATE competition SET  type_comp_id = $1, event_id = $2, place_event_id =$3, date_competition = $4, hour_competition = $5  WHERE comp_id = $6;",
+        "updateCompetition": "UPDATE competition SET   event_id = $1, place_event_id =$2, type_comp_id = $3, date_competition = $4, hour_competition = $5  WHERE comp_id = $6;",
         "deleteCompetition": "DELETE FROM competition WHERE comp_id = $1;",
-        "selectCompetitions": "SELECT comp_id, date_competition, hour_competition, type_comp_id, event_id, place_event_id FROM competition ORDER BY comp_id;",
+        "selectCompetitions": "SELECT c.comp_id, c.date_competition, c.hour_competition, tc.na_type_comp , e.na_event , pe.na_place_event FROM competition c JOIN type_competition tc ON c.type_comp_id = tc.type_comp_id JOIN event e ON c.event_id = e.event_id JOIN place_event pe ON c.place_event_id = pe.place_event_id ORDER BY c.comp_id;",
 
         "insertSportStatistic": "INSERT INTO sport_statistic (statistic_concept_id, team_member_id, comp_id, statistic) VALUES ($1, $2, $3, $4);",
         "updateSportStatistic": "UPDATE sport_statistic SET statistic_concept_id = $1, team_member_id = $2, comp_id = $3, statistic = $4 WHERE sport_statistic_id = $5;",
         "deleteSportStatistic": "DELETE FROM sport_statistic WHERE sport_statistic_id = $1;",
-        "selectSportStatistics": "SELECT sport_statistic_id, statistic_concept_id, team_member_id, comp_id, statistic FROM sport_statistic ORDER BY sport_statistic_id;",
+        "selectSportStatistics": "SELECT ss.*, p.na_person, p.ln_person, scg.unit_meassure FROM sport_statistic ss JOIN team_member tm ON ss.team_member_id = tm.team_member_id JOIN person p ON tm.person_id = p.person_id JOIN statistic_concept_general scg ON ss.statistic_concept_id = scg.statistic_concept_id;",
+        "selectSportStatisticsByTeamMember": "SELECT ss.*, p.na_person, p.ln_person, scg.unit_meassure FROM sport_statistic ss JOIN team_member tm ON ss.team_member_id = tm.team_member_id JOIN person p ON tm.person_id = p.person_id JOIN statistic_concept_general scg ON ss.statistic_concept_id = scg.statistic_concept_id WHERE tm.team_member_id = $1;",
 
         "insertLineUp": "INSERT INTO line_up (position_id, type_line_up_id, team_member_id, de_line_up, team_comp_id) VALUES ($1, $2, $3, $4, $5);",
         "updateLineUp": "UPDATE line_up SET position_id = $1, type_line_up_id = $2, team_member_id = $3, de_line_up = $4, team_comp_id = $5 WHERE line_up_id = $6;",
         "deleteLineUp": "DELETE FROM line_up WHERE line_up_id = $1;",
-        "selectLineUps": "SELECT * from line_up;"
+        "selectLineUps": "SELECT lu.line_up_id,lu.de_line_up,lu.position_id,po.na_position ,lu.type_line_up_id,tl.na_line_up ,lu.team_member_id,p.na_person ,p.ln_person,lu.team_comp_id FROM line_up lu JOIN position po ON lu.position_id = po.position_id JOIN type_line_up tl ON lu.type_line_up_id = tl.type_line_up_id JOIN team_member tm ON lu.team_member_id = tm.team_member_id JOIN team_competition tc ON lu.team_comp_id = tc.team_comp_id JOIN person p on tm.person_id = p.person_id; ",
+        "selectLineUpsByType": "SELECT lu.line_up_id,lu.de_line_up,lu.position_id,po.na_position ,lu.type_line_up_id,tl.na_line_up ,lu.team_member_id,p.na_person ,p.ln_person,lu.team_comp_id FROM line_up lu JOIN position po ON lu.position_id = po.position_id JOIN type_line_up tl ON lu.type_line_up_id = tl.type_line_up_id JOIN team_member tm ON lu.team_member_id = tm.team_member_id JOIN team_competition tc ON lu.team_comp_id = tc.team_comp_id JOIN person p on tm.person_id = p.person_id WHERE lu.type_line_up_id = $1;",
+
+
+        "selectTeamComp": "select * from team_competition;",
+        "selectMeassure": "select sc.sport_id, s.na_sport, sc.de_statistic_concept, sc.unit_meassure , sc.statistic_concept_id from statistic_concept_general sc join sport s on sc.sport_id = s.sport_id;"
+
 
 
 

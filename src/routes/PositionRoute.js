@@ -7,6 +7,6 @@ const router = express.Router();
 router.get('/', positionController.seleccionar)
 router.post('/', positionController.insertar)
 router.put('/', positionController.actualizar)
-router.delete('/', positionController.borrar)
+router.delete('/:id_position', positionController.borrar)
 
 export default router;

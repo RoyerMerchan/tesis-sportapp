@@ -7,6 +7,6 @@ const router = express.Router();
 router.get('/', institutionController.seleccionar)
 router.post('/', institutionController.insertar)
 router.put('/', institutionController.actualizar)
-router.delete('/', institutionController.borrar)
+router.delete('/:id_institutions', institutionController.borrar)
 
 export default router;

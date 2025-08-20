@@ -7,6 +7,6 @@ import profileController from '../Controller/ProfileController.js';
 router.get('/', profileController.seleccionar)
 router.post('/', profileController.insertar)
 router.put('/', profileController.actualizar)
-router.delete('/', profileController.borrar)
+router.delete('/:id_profile', profileController.borrar)
 
 export default router;

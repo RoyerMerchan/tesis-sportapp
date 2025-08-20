@@ -2,13 +2,13 @@ class SportController {
   async insertar(req, res) {
     const { name_sport, de_sport } = req.body;
     if (!name_sport || !de_sport)
-      return sendToCli({ status: 400, msg: "Nombre y descripción requeridos" });
+      return res.status(400).json({ status: 400, msg: "Nombre y descripción requeridos" });
 
     try {
       await db.exe("sport", "insertSport", [name_sport, de_sport]);
-      return sendToCli({ status: 201, msg: "Deporte creado exitosamente" });
+      return res.status(201).json({ status: 201, msg: "Deporte creado exitosamente" });
     } catch (err) {
-      return sendToCli({ status: 500, msg: "Error al insertar deporte", detalle: err.message });
+      return res.status(500).json({ status: 500, msg: "Error al insertar deporte", detalle: err.message });
     }
   }
 
@@ -28,36 +28,36 @@ class SportController {
       }
 
        if (result.rowCount === 0) {
-        return sendToCli({ status: 404, msg: "deporte no encontrada" });
+        return res.status(404).json({ status: 404, msg: "deporte no encontrada" });
       }
-      return sendToCli({ status: 200, msg: "Deporte actualizado correctamente" });
+      return res.status(200).json({ status: 200, msg: "Deporte actualizado correctamente" });
     } catch (err) {
-      return sendToCli({ status: 500, msg: "Error al actualizar deporte", detalle: err.message });
+      return res.status(500).json({ status: 500, msg: "Error al actualizar deporte", detalle: err.message });
     }
   }
 
   async borrar(req, res) {
-    const { id_sport } = req.query;
+    const { id_sport } = req.params;
     if (!id_sport)
       return sendToCli({ status: 400, msg: "ID requerido para eliminar" });
 
     try {
       const result = await db.exe("sport", "deleteSport", [id_sport]);
        if (result.rowCount === 0) {
-        return sendToCli({ status: 404, msg: "deporte no encontrado" });
+        return res.status(404).json({ status: 404, msg: "deporte no encontrado" });
       }
-      return sendToCli({ status: 200, msg: "Deporte eliminado correctamente" });
+      return res.status(200).json({ status: 200, msg: "Deporte eliminado correctamente" });
     } catch (err) {
-      return sendToCli({ status: 500, msg: "Error al eliminar deporte", detalle: err.message });
+      return res.status(500).json({ status: 500, msg: "Error al eliminar deporte", detalle: err.message });
     }
   }
 
   async seleccionar(req, res) {
     try {
       const resultado = await db.exe("sport", "selectSports");
-      return sendToCli({ status: 200, data: resultado.rows });
+      return res.status(200).json({ status: 200, data: resultado.rows });
     } catch (err) {
-      return sendToCli({ status: 500, msg: "Error al consultar deportes", detalle: err.message });
+      return res.status(500).json({ status: 500, msg: "Error al consultar deportes", detalle: err.message });
     }
   }
 }

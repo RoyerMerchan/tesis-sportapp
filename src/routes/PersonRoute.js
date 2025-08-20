@@ -7,6 +7,7 @@ const router = express.Router();
 router.get('/', PersonController.seleccionar)
 router.post('/', PersonController.insertar)
 router.put('/', PersonController.actualizar)
-router.delete('/', PersonController.borrar)
+router.delete('/:id_person', PersonController.borrar)
+router.get('/persontp/:id_type_person', PersonController.seleccionarByType)
 
 export default router;

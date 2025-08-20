@@ -7,6 +7,7 @@ const router = express.Router();
 router.get('/', sportStatisticController.seleccionar)
 router.post('/', sportStatisticController.insertar)
 router.put('/', sportStatisticController.actualizar)
-router.delete('/', sportStatisticController.borrar)
+router.delete('/:sport_statistic_id', sportStatisticController.borrar)
+router.get('/filter/:team_member_id', sportStatisticController.seleccionarPorJugador)
 
 export default router;

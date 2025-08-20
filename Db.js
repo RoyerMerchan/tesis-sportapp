@@ -25,6 +25,23 @@ const Db = class{
             return null;
         }
     }
+
+    async runTransaction(callback) {
+        const client = await this.pool.connect();
+        try {
+            await client.query('BEGIN');
+            await callback(client);
+            await client.query('COMMIT');
+        } catch (error) {
+            await client.query('ROLLBACK');
+            throw error;
+        } finally {
+            client.release();
+        }
+    }
+
+
+
 }
 
 module.exports = Db;

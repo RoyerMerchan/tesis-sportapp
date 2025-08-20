@@ -3,7 +3,7 @@ import cors from  'cors'
 import Session from './Session.js';
 import Db from './Db.js';
 import Security from './Security.js';
-import Institution from './src/BO/Institution.js'
+
 
 // Import routes
 import UserRoute from './src/routes/UserRoute.js';
@@ -22,12 +22,18 @@ import TeamRoute from './src/routes/TeamRoute.js';
 import TypeCompetitionRoute from './src/routes/TypeCompetitionRoute.js';
 import TypePersonRoute from './src/routes/TypePersonRoute.js';
 import TypeLineUpRoute from './src/routes/TypeLineUpRoute.js';
+import SpecificRoute from './src/routes/specificRoute.js';
+
 import { Router } from 'express';
 
 
 // import pool from './db.js';
 const app = express();
-// app.use(cors)
+app.use(cors({
+  origin: 'http://localhost:5173',
+  credentials: true // si usás cookies o sesiones
+}));
+
 app.use(express.static('public'));
 app.use("/static", express.static("public"));
 app.use(express.json());
@@ -43,6 +49,7 @@ let RESP = null;
 let REQ = null;
 
 security.ge
+
 
 app.use((req, res, next)=>{
   RESP = res;
@@ -138,19 +145,19 @@ global.checkPermission = (req, endpoint)=> {
   }
 }
 
-app.use((req, res, next)=>{
-console.log('middleware ejecutado');
-if(sess.sessionExist(req)){
-//obtener el endpoint que se esta ejecutando, obtener el metodo que se esta utilizando, y a partir de la request obtener la sesion
-//para saber que perfil tiene y asi validar los permisos
-  console.log("tiene sesion");
-  next(); 
-}
-else{
-  sendToCli({status: 403, msg: "sesion invalida"})
-}
+// app.use((req, res, next)=>{
+// console.log('middleware ejecutado');
+// if(sess.sessionExist(req)){
+// //obtener el endpoint que se esta ejecutando, obtener el metodo que se esta utilizando, y a partir de la request obtener la sesion
+// //para saber que perfil tiene y asi validar los permisos
+//   console.log("tiene sesion");
+//   next(); 
+// }
+// else{
+//   sendToCli({status: 403, msg: "sesion invalida"})
+// }
 
-})
+// })
 
 
 //use routes
@@ -164,12 +171,14 @@ app.use('/api/placeevent', PlaceEventRoute);// insert probado
 app.use('/api/event', EventRoute);// insert probado
 app.use('/api/institution', InstitutionRoute);// insert probado
 app.use('/api/sport', SportRoute);// insert probado
-app.use('/api/sportstadistic', SportStadisticRoute);//
+app.use('/api/sportstatistic', SportStadisticRoute);//
 app.use('/api/teammember', TeamMemberRoute);//
 app.use('/api/team', TeamRoute);//
 app.use('/api/typecompetition', TypeCompetitionRoute);//
 app.use('/api/typeperson', TypePersonRoute);// insert probado
 app.use('/api/typelineup', TypeLineUpRoute);//
+app.use('/api/specific', SpecificRoute);//
+
 
 const PORT = process.env.PORT || 8000;
 app.listen(PORT, () => {
